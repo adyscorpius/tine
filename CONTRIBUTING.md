@@ -26,8 +26,13 @@ Instead of opening a PR with code, open an issue written as a short
 specification:
 
 1. **Problem** — what's broken or missing, concretely.
-2. **Proposed behavior** — what should happen instead. Be specific about
-   edge cases, not just the happy path.
+2. **Proposed behavior** — described as an interaction, with an example
+   and, ideally, a counterexample (a case that shows what you *don't*
+   mean). "When I do X, Y should happen — but it shouldn't also do Z"
+   is more useful to a maintainer than a description of which function
+   or file to change; you know the interaction you want, they know the
+   codebase, and pointing at implementation details you're guessing at
+   usually costs more time than it saves.
 3. **Key decisions** — anything that would need an ADR if implemented:
    data format changes, new dependencies, concurrency implications,
    backwards-compatibility.
@@ -39,6 +44,12 @@ A maintainer will implement it (commonly with AI assistance — see
 means a human-readable spec is the thing that gets security- and
 correctness-reviewed, rather than an arbitrary diff, which is the whole
 reason this model exists.
+
+If an agent is working through issues autonomously on the maintainer's
+behalf, its public comments should say so plainly ("working on
+<maintainer>'s behalf") rather than reading as an independent actor —
+and should stay tentative ("this should be fixed — can you confirm?")
+until a human has actually verified the fix, not just that it built.
 
 **Exception:** trivial, purely non-functional changes (typos, doc fixes,
 broken links) can be ordinary pull requests using the standard PR

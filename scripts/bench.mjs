@@ -17,8 +17,20 @@
 // Replace `measureAppMetric` with your project's actual perf-sensitive
 // operation (a page load, a large-input parse, whatever your product's
 // core value proposition depends on staying fast).
+//
+//   node scripts/bench.mjs            measure and compare against the
+//                                      existing baseline (fails if missing)
+//   node scripts/bench.mjs --update    deliberately (re)write the baseline
+//                                      from this run
+//
+// The baseline never moves except via an explicit --update. A baseline
+// that quietly writes itself on first run, or re-writes itself whenever
+// a run happens to pass, isn't a baseline — it's a number that can never
+// catch a regression that crept in one small step at a time.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+
+const UPDATE = process.argv.includes("--update");
 
 const BASELINE_FILE = new URL("./bench-baseline.json", import.meta.url).pathname;
 const REGRESSION_THRESHOLD = 0.3; // 30% — set above your metric's noise floor
@@ -58,10 +70,15 @@ const normalized = raw / calib;
 console.log(`calib: ${calib.toFixed(2)}ms`);
 console.log(`appMetric: raw=${raw.toFixed(2)}ms normalized=${normalized.toFixed(4)}`);
 
-if (!existsSync(BASELINE_FILE)) {
+if (UPDATE) {
   writeFileSync(BASELINE_FILE, JSON.stringify({ calib, appMetric: normalized }, null, 2) + "\n");
-  console.log("bench: no baseline found, wrote one. Run again to check for regressions.");
+  console.log("bench: baseline updated.");
   process.exit(0);
+}
+
+if (!existsSync(BASELINE_FILE)) {
+  console.error("bench: no baseline found. Run `node scripts/bench.mjs --update` once, deliberately, to create one.");
+  process.exit(1);
 }
 
 const baseline = JSON.parse(readFileSync(BASELINE_FILE, "utf8"));
