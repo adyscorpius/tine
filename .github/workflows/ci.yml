@@ -1,0 +1,30 @@
+name: CI
+
+# Deliberately cheap and fast: no full app build, no cross-platform
+# matrix. Push those to release.yml, gated on a version tag, so the
+# fast loop on every push/PR stays fast.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: cargo test -p core

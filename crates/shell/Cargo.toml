@@ -1,0 +1,14 @@
+[package]
+name = "shell"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "shell"
+path = "src/main.rs"
+
+[dependencies]
+core = { path = "../core" }
+# Swap in your real glue framework here (a CLI arg parser, a Tauri/IPC
+# crate, a web framework). Whatever you add, it should only ever call
+# into `core` — never contain business logic itself.

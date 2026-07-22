@@ -1,0 +1,28 @@
+name: Feature proposal
+description: Propose a change, as a spec — see CONTRIBUTING.md
+labels: [proposal]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What's broken or missing, concretely?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: What should happen instead? Include edge cases, not just the happy path.
+    validations:
+      required: true
+  - type: textarea
+    id: decisions
+    attributes:
+      label: Key decisions
+      description: Anything that would need an ADR if implemented (data format, new dependency, concurrency, backwards-compatibility)?
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: How does a reference implementation (if one exists) handle this?
